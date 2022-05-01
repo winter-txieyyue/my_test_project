@@ -148,6 +148,10 @@ class ClassRegisterer {
   ~ClassRegisterer() {}
 };
 
+#define PP_JOIN(X, Y) PP_DO_JOIN(X, Y)
+#define PP_DO_JOIN(X, Y) PP_DO_JOIN2(X, Y)
+#define PP_DO_JOIN2(X, Y) X##Y
+
 // Define a registry for a base class.
 //
 // The first parameter, register_name, should be unique globally.

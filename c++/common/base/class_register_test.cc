@@ -1,6 +1,8 @@
 // Author: txieyyue
 // Date: 2022-05-01
 
+#include <memory>
+
 #include "gtest/gtest.h"
 
 #include "common/base/class_register.h"
@@ -22,7 +24,7 @@ class NetworkFileImpl : public FileImpl {
 REGISTER_FILE_IMPL("/nfs", NetworkFileImpl);
 
 TEST(ClassRegister, CreateFileImpl) {
-  scoped_ptr<FileImpl> file_impl;
+  std::unique_ptr<FileImpl> file_impl;
   file_impl.reset(CREATE_FILE_IMPL("/mem"));
   ASSERT_TRUE(file_impl.get() != NULL);
   EXPECT_EQ("MemFileImpl", file_impl->GetFileImplName());
@@ -65,7 +67,7 @@ TEST(ClassRegister, FileImplNames) {
 }
 
 TEST(ClassRegister, FileImplSingleton) {
-  scoped_ptr<FileImpl> file_impl;
+  std::unique_ptr<FileImpl> file_impl;
   ASSERT_TRUE(GET_FILE_IMPL_SINGLETON("/mem") != NULL);
   EXPECT_EQ("MemFileImpl", GET_FILE_IMPL_SINGLETON("/mem")->GetFileImplName());
   // Test if it's a "real" singleton.
@@ -92,4 +94,9 @@ TEST(ClassRegister, FileImplSingleton) {
   EXPECT_TRUE(GET_FILE_IMPL_SINGLETON("") == NULL);
   EXPECT_TRUE(GET_FILE_IMPL_SINGLETON("/mem/") == NULL);
   EXPECT_TRUE(GET_FILE_IMPL_SINGLETON("/mem2") == NULL);
+}
+
+int main(int argc, char** argv) {
+  testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
 }
